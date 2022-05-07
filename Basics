@@ -1,0 +1,64 @@
+void AFloor::SpawnItem(UClass* ItemToSpawn)
+{
+	float xcoordinate = FMath::FRandRange(-500.f, 500.f);
+	float ycoordinate = FMath::FRandRange(-500.f, 500.f);
+	float zcoordinate = FMath::FRandRange(-500.f, 500.f);
+	
+
+	float Yaw = FMath::FRandRange(0.f, 360.f);
+
+	FVector Location(xcoordinate, ycoordinate, zcoordinate);
+	FRotator Rotation(0.f, Yaw, 0.f);
+
+	GetWorld()->SpawnActor<AActor>(ItemToSpawn, Location, Rotation);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+FVector AFloor::GetRandomPointInSquare(const FVector& UpperLeft, const FVector& LowerRight)
+{
+	float RandomX = FMath::FRandRange(UpperLeft.X, LowerRight.X);
+	float RandomY = FMath::FRandRange(UpperLeft.Y, LowerRight.Y);
+	return FVector(RandomX, RandomY, GridHeight);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void AFloor::CreateGrid()
+{
+	for (int32 i=0; i < GridSizeX + 1; i++)
+	{
+		FVector Start = TopLeft + FVector(i*SquareWidth,0.f,GridHeight);
+		FVector End = Start + FVector(0.f, RoomLength, GridHeight);
+		DrawDebugLine(GetWorld(), Start, End, FColor::Blue, true);
+	}
+
+	for (int32 i = 0; i < GridSizeY + 1; i++)
+	{
+		FVector Start = TopLeft + FVector(0.f, i * SquareWidth, GridHeight);
+		FVector End = Start + FVector(RoomWidth, 0.f, GridHeight);
+		DrawDebugLine(GetWorld(), Start, End, FColor::Blue, true);
+	}
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//This is spawning an item with a noise function not included 
+void AChunks::SpawnItem(UClass* ItemToSpawn)
+{
+	float xcoordinate = FMath::FRandRange(-500.f, 500.f);
+	float ycoordinate = FMath::FRandRange(-500.f, 500.f);
+	float zcoordinate = FMath::FRandRange(-500.f, 500.f);
+	zcoordinate = Noise->GetNoise(0.f, 0.f);
+
+	float Yaw = FMath::FRandRange(0.f, 360.f);
+
+	FVector Location(xcoordinate, ycoordinate, zcoordinate+100);
+	FRotator Rotation(0.f, Yaw, 0.f);
+
+	GetWorld()->SpawnActor<AActor>(ItemToSpawn, Location, Rotation);
+
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
